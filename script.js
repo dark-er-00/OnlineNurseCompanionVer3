@@ -27,6 +27,10 @@
                     targetMode.classList.add('active');
                 }
 
+                if(mode === 'mentalCheck') {
+                    resetAssessment(); // This will show the questionnaire and load the first question
+                }
+
                 // Scroll to top
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
