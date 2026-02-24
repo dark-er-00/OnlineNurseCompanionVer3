@@ -22,14 +22,30 @@
     <div class="blob bg-rose-200 w-64 h-64 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
 
     <!-- Navbar -->
-    <nav class="w-full p-6 flex justify-between items-center relative z-10">
-        <div class="flex items-center gap-2">
-            <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                <i data-lucide="shield" class="w-6 h-6"></i>
-            </div>
-            <span class="text-xl font-bold tracking-tight text-slate-800">UniWell Admin</span>
+    <div class="flex justify-between items-center py-6 mx-10 relative z-10">
+        <div class="flex items-center gap-3">
+            <i data-lucide="heart-pulse" class="text-indigo-600"></i>
+            <h1 class="text-2xl font-bold text-indigo-600">UniWell Admin</h1>
         </div>
-    </nav>
+
+        <div class="flex items-center gap-4">
+
+            <!-- Live Sync -->
+            <div class="flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span id="syncStatus">Live Sync</span>
+            </div>
+
+            <!-- Export -->
+            <button onclick="exportTable()" 
+                class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm hover:bg-indigo-700 transition">
+                <i class="fas fa-download mr-2"></i> Export
+            </button>
+
+        </div>
+    </div>
+
+    
 
     <!-- Main Content -->
     <main class="flex-grow px-0 pb-16 relative z-10">
@@ -64,40 +80,56 @@
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-10 mb-8">
 
-                <!-- Total Cases -->
-                <div class="bg-indigo-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
-                    <div>
-                        <p class="text-sm text-slate-600">Total Cases</p>
-                        <h2 id="totalCases" class="text-3xl font-bold text-indigo-600 mt-2">0</h2>
-                    </div>
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
-                        <i class="fas fa-clipboard-list text-indigo-600"></i>
-                    </div>
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 m-8">
+
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <p class="text-sm text-slate-500">Total Cases</p>
+                    <h2 id="totalCases" class="text-3xl font-bold mt-2">0</h2>
+                    <p class="text-xs text-slate-400 mt-2">All time records</p>
                 </div>
 
-                <!-- Urgent Cases -->
-                <div class="bg-red-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
-                    <div>
-                        <p class="text-sm text-slate-600">Urgent Cases</p>
-                        <h2 id="urgentCases" class="text-3xl font-bold text-red-600 mt-2">0</h2>
-                    </div>
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
-                        <i class="fas fa-exclamation-triangle text-red-600"></i>
-                    </div>
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <p class="text-sm text-slate-500">Danger Flags</p>
+                    <h2 id="urgentCases" class="text-3xl font-bold mt-2 text-red-600">0</h2>
+                    <p class="text-xs text-slate-400 mt-2">Require immediate attention</p>
                 </div>
 
-                <!-- Resolved Cases -->
-                <div class="bg-green-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
-                    <div>
-                        <p class="text-sm text-slate-600">Resolved Cases</p>
-                        <h2 id="resolvedCases" class="text-3xl font-bold text-green-600 mt-2">0</h2>
-                    </div>
-                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
-                        <i class="fas fa-check-circle text-green-600"></i>
-                    </div>
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <p class="text-sm text-slate-500">Pending Review</p>
+                    <h2 id="pendingCases" class="text-3xl font-bold mt-2 text-yellow-600">0</h2>
+                    <p class="text-xs text-slate-400 mt-2">Awaiting decision</p>
                 </div>
+
+                <div class="bg-white rounded-2xl shadow-md p-6">
+                    <p class="text-sm text-slate-500">Approved Today</p>
+                    <h2 id="resolvedCases" class="text-3xl font-bold mt-2 text-green-600">0</h2>
+                    <p class="text-xs text-slate-400 mt-2">Absent approved</p>
+                </div>
+
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-md p-4 m-8 flex flex-col md:flex-row gap-4">
+
+                <input id="searchInput"
+                    type="text"
+                    placeholder="Search students, symptoms, courses..."
+                    class="flex-1 border rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+                <select id="statusFilter" class="border rounded-xl px-4 py-2">
+                    <option value="">All Status</option>
+                    <option value="Pending Review">Pending Review</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Done">Done</option>
+                </select>
+
+                <select id="flagFilter" class="border rounded-xl px-4 py-2">
+                    <option value="">All Flags</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
 
             </div>
 
@@ -144,21 +176,44 @@
             let total = data.length;
             let urgent = 0;
             let resolved = 0;
+            let pending = 0;
 
             data.forEach(row => {
                 if (row[10] === "High") urgent++;
                 if (row[9] === "Done") resolved++;
+                if (row[9] === "Pending Review") pending++;
             });
 
             document.getElementById("totalCases").textContent = total;
             document.getElementById("urgentCases").textContent = urgent;
             document.getElementById("resolvedCases").textContent = resolved;
+            document.getElementById("pendingCases").textContent = pending;
+        }
+
+        function applyFilters(data) {
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const statusFilter = document.getElementById("statusFilter").value;
+            const flagFilter = document.getElementById("flagFilter").value;
+
+            return data.filter(row => {
+
+                const matchesSearch = row.join(" ").toLowerCase().includes(search);
+                const matchesStatus = statusFilter ? row[9] === statusFilter : true;
+                const matchesFlag = flagFilter ? row[10] === flagFilter : true;
+
+                return matchesSearch && matchesStatus && matchesFlag;
+            });
+        }
+
+        function exportTable() {
+            window.open("/api/exportCSV");
         }
 
         async function loadAdminTable(showNotification = false) {
             try {
                 const response = await fetch("/api/getAdminData");
                 const data = await response.json();
+                data = applyFilters(data);
 
                 // ---- Dashboard Counters ----
                 let total = data.length;
