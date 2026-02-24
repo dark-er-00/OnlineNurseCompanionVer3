@@ -95,18 +95,35 @@
                     const tr = document.createElement("tr");
                     tr.className = "bg-white rounded-2xl shadow-sm hover:shadow-md transition-all";
 
-                    // 10 columns from Google Sheets
-                    for (let i = 0; i < 10; i++) {
+                    for (let i = 0; i < 11; i++) {
                         const td = document.createElement("td");
                         td.className = "px-4 py-4";
-                        td.textContent = row[i] || "";
+
+                        // Color badge for urgency column
+                        if (i === 10) {
+                            const urgency = row[i];
+
+                            let colorClass = "";
+
+                            if (urgency === "High") {
+                                colorClass = "bg-red-100 text-red-600";
+                            } else if (urgency === "Medium") {
+                                colorClass = "bg-yellow-100 text-yellow-600";
+                            } else {
+                                colorClass = "bg-green-100 text-green-600";
+                            }
+
+                            td.innerHTML = `
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${colorClass}">
+                                    ${urgency}
+                                </span>
+                            `;
+                        } else {
+                            td.textContent = row[i] || "";
+                        }
+
                         tr.appendChild(td);
                     }
-
-                    // 11th column (empty for now)
-                    const emptyTd = document.createElement("td");
-                    emptyTd.className = "px-4 py-4 rounded-r-2xl";
-                    tr.appendChild(emptyTd);
 
                     tableBody.appendChild(tr);
                 });
