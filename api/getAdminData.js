@@ -5,48 +5,35 @@ function computeUrgency(row) {
   const dangerFlag = (row[7] || "").toLowerCase(); // Column 8
   const canAttend = (row[8] || "").toLowerCase(); // Column 9
 
-  // HIGH urgency
-  if (
-    dangerFlag === "yes" ||
-    painLevel >= 8 ||
-    (canAttend === "no" && painLevel >= 6)
-  ) {
+  if (dangerFlag === "yes" || painLevel >= 8 || (canAttend === "no" && painLevel >= 6)) {
     return "High";
   }
 
-  // MEDIUM urgency
-  if (
-    (painLevel >= 4 && painLevel <= 7) ||
-    canAttend === "no"
-  ) {
+  if ((painLevel >= 4 && painLevel <= 7) || canAttend === "no") {
     return "Medium";
   }
 
-  // LOW urgency
   return "Low";
 }
 
 export default async function handler(req, res) {
   try {
-    const rawData = await getRawSheetData();
+    const rawData = await getRawSheetData(); // returns 2D array
 
     // Ignore header row
     const cleanedData = rawData.slice(1);
 
-        // Add urgency as 11th column
-        // Column 10 = J in Sheets
-    await sheets.spreadsheets.values.update({
-        spreadsheetId: process.env.GOOGLE_SHEET_ID,
-        range: `Sheet1!J${rowIndex + 2}`, // +2: header row
-        valueInputOption: "RAW",
-        requestBody: {
-            values: [[status]],
-        },
+    // Add urgency as 11th column
+    const enhancedData = cleanedData.map((row, index) => {
+      row.push(computeUrgency(row)); // urgency = 11th column
+      row._sheetIndex = index;       // attach sheet index for frontend
+      return row;
     });
 
     res.status(200).json(enhancedData);
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: error.message });
   }
 }
