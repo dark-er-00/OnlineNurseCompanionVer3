@@ -29,10 +29,6 @@
             </div>
             <span class="text-xl font-bold tracking-tight text-slate-800">UniWell Admin</span>
         </div>
-
-        <a href="index.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">
-            ← Back to Main
-        </a>
     </nav>
 
     <!-- Main Content -->
@@ -55,9 +51,54 @@
         <div class="w-full">
 
             <!-- Page Header -->
-            <div class="m-10">
-                <h1 class="text-4xl font-bold mb-2">Dashboard Overview</h1>
-                <p class="text-slate-500">Manage and review system records here.</p>
+            <div class="px-10 pt-10 pb-6 flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-800">Admin Dashboard</h1>
+                    <p class="text-slate-500 text-sm mt-1">
+                        Manage and monitor student health cases
+                    </p>
+                </div>
+
+                <button onclick="window.location.href='index.html'" class="bg-red-100 text-red-600 px-5 py-2 rounded-xl text-sm font-medium hover:bg-red-200 transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-10 mb-8">
+
+                <!-- Total Cases -->
+                <div class="bg-indigo-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
+                    <div>
+                        <p class="text-sm text-slate-600">Total Cases</p>
+                        <h2 id="totalCases" class="text-3xl font-bold text-indigo-600 mt-2">0</h2>
+                    </div>
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
+                        <i class="fas fa-clipboard-list text-indigo-600"></i>
+                    </div>
+                </div>
+
+                <!-- Urgent Cases -->
+                <div class="bg-red-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
+                    <div>
+                        <p class="text-sm text-slate-600">Urgent Cases</p>
+                        <h2 id="urgentCases" class="text-3xl font-bold text-red-600 mt-2">0</h2>
+                    </div>
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
+                        <i class="fas fa-exclamation-triangle text-red-600"></i>
+                    </div>
+                </div>
+
+                <!-- Resolved Cases -->
+                <div class="bg-green-100/70 rounded-3xl p-6 flex justify-between items-center shadow-md">
+                    <div>
+                        <p class="text-sm text-slate-600">Resolved Cases</p>
+                        <h2 id="resolvedCases" class="text-3xl font-bold text-green-600 mt-2">0</h2>
+                    </div>
+                    <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow">
+                        <i class="fas fa-check-circle text-green-600"></i>
+                    </div>
+                </div>
+
             </div>
 
             <!-- Table Container -->
@@ -99,10 +140,39 @@
 
         let currentRecordCount = 0;
 
+        function updateDashboardCounts(data) {
+            let total = data.length;
+            let urgent = 0;
+            let resolved = 0;
+
+            data.forEach(row => {
+                if (row[10] === "High") urgent++;
+                if (row[9] === "Done") resolved++;
+            });
+
+            document.getElementById("totalCases").textContent = total;
+            document.getElementById("urgentCases").textContent = urgent;
+            document.getElementById("resolvedCases").textContent = resolved;
+        }
+
         async function loadAdminTable(showNotification = false) {
             try {
                 const response = await fetch("/api/getAdminData");
                 const data = await response.json();
+
+                // ---- Dashboard Counters ----
+                let total = data.length;
+                let urgent = 0;
+                let resolved = 0;
+
+                data.forEach(row => {
+                    if (row[10] === "High") urgent++;        // Urgency column
+                    if (row[9] === "Done") resolved++;       // Status column
+                });
+
+                document.getElementById("totalCases").textContent = total;
+                document.getElementById("urgentCases").textContent = urgent;
+                document.getElementById("resolvedCases").textContent = resolved;
 
                 const tableBody = document.getElementById("adminTableBody");
                 tableBody.innerHTML = "";
@@ -136,10 +206,16 @@
 
                                 try {
                                     await fetch("/api/updateStatus", {
-                                        method: "POST",
-                                        headers: { "Content-Type": "application/json" },
-                                        body: JSON.stringify({ rowIndex, status }),
-                                    });
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ rowIndex, status }),
+                                });
+
+                                // 🔥 Update row locally
+                                row[9] = status;
+
+                                // 🔥 Recalculate counts instantly
+                                updateDashboardCounts(data);
                                     select.classList.add("border-green-400");
                                     setTimeout(() => select.classList.remove("border-green-400"), 1000);
                                 } catch (err) {
@@ -174,6 +250,8 @@
                 if (currentRecordCount !== 0 && data.length > currentRecordCount && showNotification) {
                     showNewCaseNotification();
                 }
+
+                updateDashboardCounts(data);
 
                 currentRecordCount = data.length;
 

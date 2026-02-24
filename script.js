@@ -75,8 +75,8 @@ function loginAdmin(event) {
     const msg = document.getElementById("loginMsg");
 
     // Demo credentials (change later or move to backend)
-    const adminUser = "admin";
-    const adminPass = "1234";
+    const adminUser = "UniwellAdmin";
+    const adminPass = "2BSecure";
 
     if (username === adminUser && password === adminPass) {
         msg.style.color = "green";
