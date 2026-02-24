@@ -212,8 +212,16 @@
         async function loadAdminTable(showNotification = false) {
             try {
                 const response = await fetch("/api/getAdminData");
-                let data = await response.json();
-                data = applyFilters(data);
+                const rawData = await response.json();
+                
+                if (currentRecordCount !== 0 && rawData.length > currentRecordCount && showNotification) {
+                    showNewCaseNotification();
+                }
+
+                currentRecordCount = rawData.length;
+
+                // Apply filters only for table rendering
+                let data = applyFilters(rawData);
 
                 // ---- Dashboard Counters ----
                 let total = data.length;
@@ -301,14 +309,7 @@
                     tableBody.appendChild(tr);
                 });
 
-                // 🔔 Check for new records
-                if (currentRecordCount !== 0 && data.length > currentRecordCount && showNotification) {
-                    showNewCaseNotification();
-                }
-
-                updateDashboardCounts(data);
-
-                currentRecordCount = data.length;
+                updateDashboardCounts(rawData);
 
             } catch (error) {
                 console.error("Error loading admin data:", error);
