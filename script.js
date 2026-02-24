@@ -50,24 +50,7 @@
 
 
            function resetViewMental() {
-    if (confirm('Are you sure you want to close? Your progress will be lost.')) {
-        resetAssessment();
-    }
-
-    document.querySelectorAll('.mentalPanel').forEach(el => {
-        el.classList.remove('hidden');
-    });
-
-    document.querySelectorAll('.mentalCheck').forEach(el => {
-        el.classList.add('hidden');
-    });
-
-    document.querySelectorAll('[id^="mode-"]').forEach(el => {
-        el.classList.add('hidden');
-    });
-    
-    const mentalPanel = document.getElementById('mode-mental');
-    if (mentalPanel) mentalPanel.classList.remove('hidden');
+    openCloseConfirmModal();
 }
             function clearSearch() {
                 const input = document.querySelector('input[type="text"]');
@@ -825,3 +808,36 @@ Now generate the result based on the provided emotional indicators.`;
 
             // Automatically remove when page unloads
             window.addEventListener("beforeunload", removeChatWidget);
+
+
+            function openCloseConfirmModal() {
+    document.getElementById("closeConfirmModal").classList.remove("hidden");
+    document.getElementById("closeConfirmModal").classList.add("flex");
+    document.body.style.overflow = "hidden";
+}
+
+function closeCloseConfirmModal() {
+    document.getElementById("closeConfirmModal").classList.add("hidden");
+    document.body.style.overflow = "";
+}
+
+function confirmCloseAssessment() {
+    closeCloseConfirmModal();
+
+    // Reset questionnaire
+    resetAssessment();
+
+    // Hide all modes
+    document.querySelectorAll('[id^="mode-"]').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('active');
+    });
+
+    // Hide container
+    interactiveContainer.classList.add('hidden');
+
+    // Show hero
+    heroSection.style.display = 'block';
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
