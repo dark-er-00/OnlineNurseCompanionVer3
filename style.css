@@ -780,3 +780,11 @@
             color: #10b981;
             font-weight: bold;
         }
+
+        table td:nth-child(3),
+        table td:nth-child(5),
+        table td:nth-child(6),
+        table td:nth-child(8),
+        table td:nth-child(9) {
+        text-transform: capitalize !important;
+        }
