@@ -38,6 +38,20 @@
     <!-- Main Content -->
     <main class="flex-grow px-6 pb-16 relative z-10">
 
+        <div id="newCaseNotification" 
+            class="hidden fixed top-6 right-6 bg-white shadow-xl rounded-2xl p-4 border border-indigo-100 z-50 animate-fade-in">
+
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div>
+                    <p class="font-semibold text-slate-800 text-sm">New Case Submitted</p>
+                    <p class="text-xs text-slate-500">A new student health case was added.</p>
+                </div>
+            </div>
+        </div>
+
         <div class="max-w-7xl mx-auto">
 
             <!-- Page Header -->
@@ -83,7 +97,9 @@
     <script>
         lucide.createIcons();
 
-        async function loadAdminTable() {
+        let currentRecordCount = 0;
+
+        async function loadAdminTable(showNotification = false) {
             try {
                 const response = await fetch("/api/getAdminData");
                 const data = await response.json();
@@ -99,10 +115,8 @@
                         const td = document.createElement("td");
                         td.className = "px-4 py-4";
 
-                        // Color badge for urgency column
                         if (i === 10) {
                             const urgency = row[i];
-
                             let colorClass = "";
 
                             if (urgency === "High") {
@@ -128,12 +142,36 @@
                     tableBody.appendChild(tr);
                 });
 
+                // 🔔 Check for new records
+                if (currentRecordCount !== 0 && data.length > currentRecordCount && showNotification) {
+                    showNewCaseNotification();
+                }
+
+                currentRecordCount = data.length;
+
             } catch (error) {
                 console.error("Error loading admin data:", error);
             }
         }
 
-        document.addEventListener("DOMContentLoaded", loadAdminTable);
+        function showNewCaseNotification() {
+            const notif = document.getElementById("newCaseNotification");
+            notif.classList.remove("hidden");
+
+            setTimeout(() => {
+                notif.classList.add("hidden");
+            }, 5000);
+        }
+
+        // Initial load
+        document.addEventListener("DOMContentLoaded", () => {
+            loadAdminTable(false);
+
+            // Poll every 5 seconds
+            setInterval(() => {
+                loadAdminTable(true);
+            }, 5000);
+        });
     </script>
 
 </body>
