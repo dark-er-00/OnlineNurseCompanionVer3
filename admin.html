@@ -115,24 +115,54 @@
                         const td = document.createElement("td");
                         td.className = "px-4 py-4";
 
-                        if (i === 10) {
+                        // Status column
+                        if (i === 9) {
+                            const select = document.createElement("select");
+                            select.className = "border rounded-xl px-3 py-1 text-sm bg-white cursor-pointer";
+
+                            const options = ["Pending Review", "Under Review", "Done"];
+                            options.forEach(opt => {
+                                const optionEl = document.createElement("option");
+                                optionEl.value = opt;
+                                optionEl.textContent = opt;
+                                if (row[i] === opt) optionEl.selected = true;
+                                select.appendChild(optionEl);
+                            });
+
+                            select.addEventListener("change", async () => {
+                                try {
+                                    const rowIndex = row._sheetIndex; // frontend needs sheet index
+                                    const status = select.value;
+
+                                    await fetch("/api/updateStatus", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({ rowIndex, status }),
+                                    });
+
+                                    // Optional visual feedback
+                                    select.classList.add("border-green-400");
+                                    setTimeout(() => select.classList.remove("border-green-400"), 1000);
+
+                                } catch (err) {
+                                    console.error("Failed to update status:", err);
+                                }
+                            });
+
+                            td.appendChild(select);
+                        } 
+                        // Urgency column
+                        else if (i === 10) {
                             const urgency = row[i];
                             let colorClass = "";
 
-                            if (urgency === "High") {
-                                colorClass = "bg-red-100 text-red-600";
-                            } else if (urgency === "Medium") {
-                                colorClass = "bg-yellow-100 text-yellow-600";
-                            } else {
-                                colorClass = "bg-green-100 text-green-600";
-                            }
+                            if (urgency === "High") colorClass = "bg-red-100 text-red-600";
+                            else if (urgency === "Medium") colorClass = "bg-yellow-100 text-yellow-600";
+                            else colorClass = "bg-green-100 text-green-600";
 
-                            td.innerHTML = `
-                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${colorClass}">
-                                    ${urgency}
-                                </span>
-                            `;
-                        } else {
+                            td.innerHTML = `<span class="px-3 py-1 rounded-full text-xs font-semibold ${colorClass}">${urgency}</span>`;
+                        } 
+                        else {
                             td.textContent = row[i] || "";
                         }
 

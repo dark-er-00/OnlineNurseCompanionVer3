@@ -33,10 +33,15 @@ export default async function handler(req, res) {
     // Ignore header row
     const cleanedData = rawData.slice(1);
 
-    // Add urgency as 11th column
-    const enhancedData = cleanedData.map(row => {
-      const urgency = computeUrgency(row);
-      return [...row, urgency]; // append as column 11
+        // Add urgency as 11th column
+        // Column 10 = J in Sheets
+    await sheets.spreadsheets.values.update({
+        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+        range: `Sheet1!J${rowIndex + 2}`, // +2: header row
+        valueInputOption: "RAW",
+        requestBody: {
+            values: [[status]],
+        },
     });
 
     res.status(200).json(enhancedData);
