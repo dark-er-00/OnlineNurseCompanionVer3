@@ -22,7 +22,7 @@
     <div class="blob bg-rose-200 w-64 h-64 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
 
     <!-- Navbar -->
-    <div class="flex justify-between items-center py-6 mx-10 relative z-10">
+    <div class="flex justify-between items-center py-6 m-8">
         <div class="flex items-center gap-3">
             <i data-lucide="heart-pulse" class="text-indigo-600"></i>
             <h1 class="text-2xl font-bold text-indigo-600">UniWell Admin</h1>
@@ -212,7 +212,7 @@
         async function loadAdminTable(showNotification = false) {
             try {
                 const response = await fetch("/api/getAdminData");
-                const data = await response.json();
+                let data = await response.json();
                 data = applyFilters(data);
 
                 // ---- Dashboard Counters ----
