@@ -74,17 +74,18 @@ function loginAdmin(event) {
     const password = document.getElementById("adminPass").value;
     const msg = document.getElementById("loginMsg");
 
-    // demo credentials (you can change later)
+    // Demo credentials (change later or move to backend)
     const adminUser = "admin";
     const adminPass = "1234";
 
     if (username === adminUser && password === adminPass) {
         msg.style.color = "green";
-        msg.innerText = "Login successful!";
+        msg.innerText = "Login successful! Redirecting...";
+
         setTimeout(() => {
-            closeLogin();
-            alert("Welcome Admin!");
+            window.location.href = "admin.html"; // ✅ Redirect to admin page
         }, 1000);
+
     } else {
         msg.style.color = "red";
         msg.innerText = "Invalid username or password";
