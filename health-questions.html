@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UniWell | Health Questions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .blob {
+            position: absolute;
+            filter: blur(90px);
+            opacity: 0.5;
+            z-index: 0;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 min-h-screen flex flex-col relative bg-slate-50">
+
+<!-- Background -->
+<div class="blob bg-indigo-300 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+<div class="blob bg-teal-200 w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3"></div>
+
+<!-- Navbar -->
+<nav class="w-full p-6 flex justify-between items-center relative z-10">
+    <div class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
+            <i data-lucide="heart-pulse" class="w-6 h-6"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight">UniWell Health Questions</span>
+    </div>
+
+    <a href="index.html" class="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors">
+        ← Back to Main
+    </a>
+</nav>
+
+<main class="flex-grow px-6 pb-16 relative z-10">
+
+<div class="w-full">
+
+<!-- Header -->
+<div class="mb-10">
+    <h1 class="text-4xl font-bold mb-3">Common Health Questions & Evidence-Based Answers</h1>
+    <p class="text-slate-500 max-w-3xl">
+        This guide provides medically accurate information for common health concerns among students.
+        This page is for educational purposes only and does not replace professional medical consultation.
+    </p>
+</div>
+
+<!-- Emergency Section -->
+<div class="bg-red-50 border border-red-200 text-red-700 rounded-3xl p-6 mb-10 shadow-md">
+    <div class="flex gap-4">
+        <i data-lucide="alert-triangle"></i>
+        <div>
+            <p class="font-semibold text-lg">Seek Immediate Medical Care If You Experience:</p>
+            <ul class="list-disc ml-6 mt-3 text-sm space-y-1">
+                <li>Chest pain or pressure</li>
+                <li>Difficulty breathing</li>
+                <li>Sudden weakness or numbness on one side</li>
+                <li>Seizures or fainting</li>
+                <li>Severe allergic reaction (swelling of lips/throat)</li>
+                <li>Uncontrolled bleeding</li>
+                <li>High fever above 39°C lasting more than 3 days</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ Container -->
+<div id="faqContainer" class="space-y-4"></div>
+
+</div>
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400 relative z-10">
+    &copy; 2026 UniWell Health Education
+</footer>
+
+<script>
+lucide.createIcons();
+
+const faqs = [
+
+{ question: "What is a normal body temperature?",
+answer: "Normal body temperature ranges from 36.1°C to 37.2°C. A fever is generally 38°C or higher and usually indicates infection." },
+
+{ question: "What are common causes of fever?",
+answer: "Fever is commonly caused by viral infections (like flu or colds), bacterial infections, inflammation, or heat exhaustion." },
+
+{ question: "What causes headaches?",
+answer: "Common triggers include dehydration, stress, lack of sleep, eye strain, skipped meals, or tension. Sudden severe headache requires urgent care." },
+
+{ question: "How can I prevent dehydration?",
+answer: "Drink 2–3 liters of fluids daily. Increase intake if exercising or in hot environments. Dark urine may indicate dehydration." },
+
+{ question: "What are signs of anxiety?",
+answer: "Rapid heartbeat, excessive worry, sweating, difficulty concentrating, sleep problems, and muscle tension are common signs." },
+
+{ question: "What are signs of depression?",
+answer: "Persistent sadness, loss of interest in activities, fatigue, appetite changes, sleep disturbances, and feelings of hopelessness lasting more than 2 weeks." },
+
+{ question: "What causes stomach pain?",
+answer: "Indigestion, gas, constipation, food poisoning, menstrual cramps, or infection. Severe or persistent pain requires evaluation." },
+
+{ question: "What is heat exhaustion?",
+answer: "A condition caused by prolonged heat exposure leading to heavy sweating, weakness, dizziness, nausea, and headache." },
+
+{ question: "When is cough serious?",
+answer: "Seek care if cough lasts more than 3 weeks, produces blood, or is accompanied by chest pain or shortness of breath." },
+
+{ question: "How much sleep do students need?",
+answer: "Most adults need 7–9 hours of sleep per night for optimal physical and mental health." },
+
+{ question: "What causes chest pain?",
+answer: "Causes range from muscle strain and acid reflux to heart problems. Emergency care is needed if accompanied by breathing difficulty or sweating." },
+
+{ question: "How can I boost immunity?",
+answer: "Maintain balanced diet, regular exercise, adequate sleep, hydration, and recommended vaccinations." },
+
+{ question: "What are symptoms of food poisoning?",
+answer: "Nausea, vomiting, diarrhea, stomach cramps, and sometimes fever. Severe dehydration or blood in stool requires medical attention." },
+
+{ question: "What causes dizziness?",
+answer: "Low blood pressure, dehydration, inner ear problems, anxiety, or low blood sugar." },
+
+{ question: "What is normal blood pressure?",
+answer: "Normal blood pressure is generally around 120/80 mmHg. Consistently high readings may indicate hypertension." },
+
+{ question: "What are signs of severe allergic reaction?",
+answer: "Swelling of face or throat, difficulty breathing, rapid heartbeat, dizziness, or hives. Immediate emergency treatment is required." },
+
+{ question: "How can I manage stress?",
+answer: "Practice deep breathing, exercise regularly, maintain sleep routine, connect socially, and limit caffeine intake." },
+
+{ question: "What causes fatigue?",
+answer: "Lack of sleep, anemia, thyroid issues, stress, dehydration, or infection." },
+
+{ question: "When should I see a doctor?",
+answer: "If symptoms are severe, worsening, persistent beyond several days, or interfere with daily functioning." }
+
+];
+
+const container = document.getElementById("faqContainer");
+
+faqs.forEach(faq => {
+    const div = document.createElement("div");
+    div.className = "bg-white rounded-3xl shadow-sm hover:shadow-md transition-all border";
+
+    div.innerHTML = `
+        <button class="w-full text-left px-6 py-5 flex justify-between items-center">
+            <span class="font-semibold text-lg">${faq.question}</span>
+            <i data-lucide="chevron-down" class="transition-transform"></i>
+        </button>
+        <div class="px-6 pb-6 text-slate-600 hidden leading-relaxed">
+            ${faq.answer}
+        </div>
+    `;
+
+    const button = div.querySelector("button");
+    const answer = div.querySelector("div");
+    const icon = div.querySelector("i");
+
+    button.addEventListener("click", () => {
+        answer.classList.toggle("hidden");
+        icon.classList.toggle("rotate-180");
+    });
+
+    container.appendChild(div);
+});
+
+lucide.createIcons();
+</script>
+
+</body>
+</html>

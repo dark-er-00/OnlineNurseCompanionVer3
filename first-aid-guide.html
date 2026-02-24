@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UniWell | First Aid Manual</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+body { font-family: 'Outfit', sans-serif; }
+.blob {
+    position:absolute;
+    filter:blur(100px);
+    opacity:0.4;
+    z-index:0;
+}
+.section-content {
+    display:none;
+}
+.section-content.active {
+    display:block;
+}
+</style>
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col relative">
+
+<div class="blob bg-indigo-300 w-96 h-96 rounded-full top-0 left-0 -translate-x-1/2 -translate-y-1/2"></div>
+<div class="blob bg-teal-200 w-80 h-80 rounded-full bottom-0 right-0 translate-x-1/3 translate-y-1/3"></div>
+
+<!-- Navbar -->
+<nav class="w-full p-6 flex justify-between items-center relative z-10">
+    <div class="flex items-center gap-2">
+        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white">
+            <i data-lucide="shield-plus"></i>
+        </div>
+        <span class="font-bold text-xl">UniWell First Aid Manual</span>
+    </div>
+    <a href="index.html" class="text-sm text-slate-600 hover:text-indigo-600">← Back</a>
+</nav>
+
+<main class="flex-grow relative z-10 px-6 pb-16">
+
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
+
+<!-- SIDEBAR NAV -->
+<aside class="lg:w-1/4 lg:sticky lg:top-10 h-fit bg-white/80 backdrop-blur-sm p-6 rounded-3xl shadow-md border border-white/50">
+    <h2 class="font-semibold mb-4">Emergency Topics</h2>
+    <ul class="space-y-3 text-sm">
+        <li><button onclick="showSection('cpr')" class="hover:text-indigo-600">CPR</button></li>
+        <li><button onclick="showSection('choking')" class="hover:text-indigo-600">Choking</button></li>
+        <li><button onclick="showSection('bleeding')" class="hover:text-indigo-600">Severe Bleeding</button></li>
+        <li><button onclick="showSection('burns')" class="hover:text-indigo-600">Burns</button></li>
+        <li><button onclick="showSection('seizure')" class="hover:text-indigo-600">Seizures</button></li>
+        <li><button onclick="showSection('fainting')" class="hover:text-indigo-600">Fainting</button></li>
+    </ul>
+</aside>
+
+<!-- CONTENT -->
+<section class="lg:w-3/4 space-y-10">
+
+<!-- EMERGENCY ALERT -->
+<div class="bg-red-50 border border-red-200 rounded-3xl p-6">
+    <div class="flex gap-3">
+        <i data-lucide="alert-triangle" class="text-red-600"></i>
+        <div>
+            <p class="font-semibold text-red-700">Call Emergency Services Immediately If:</p>
+            <ul class="list-disc ml-6 mt-2 text-sm text-red-600 space-y-1">
+                <li>Person is unconscious</li>
+                <li>Not breathing</li>
+                <li>Heavy bleeding that won’t stop</li>
+                <li>Chest pain with difficulty breathing</li>
+                <li>Seizure longer than 5 minutes</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- CPR -->
+<div id="cpr" class="section-content active bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">CPR (Cardiopulmonary Resuscitation)</h2>
+    <p class="mb-4 text-slate-600">Used when a person is unresponsive and not breathing.</p>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Call emergency services immediately.</li>
+        <li>Place the heel of one hand in the center of the chest.</li>
+        <li>Place the other hand on top and interlock fingers.</li>
+        <li>Push hard and fast (100–120 compressions per minute).</li>
+        <li>Allow full chest recoil between compressions.</li>
+        <li>If trained, give 2 rescue breaths after 30 compressions.</li>
+    </ol>
+
+    <p class="mt-4 text-sm text-slate-500">
+        Continue until help arrives or the person shows signs of life.
+    </p>
+</div>
+
+<!-- CHOKING -->
+<div id="choking" class="section-content bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">Choking (Heimlich Maneuver)</h2>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Ask if the person can speak or cough.</li>
+        <li>Stand behind them and wrap arms around waist.</li>
+        <li>Make a fist above the navel.</li>
+        <li>Perform quick upward abdominal thrusts.</li>
+        <li>Repeat until object is expelled.</li>
+    </ol>
+
+    <p class="mt-4 text-sm text-slate-500">
+        If the person becomes unconscious, begin CPR.
+    </p>
+</div>
+
+<!-- BLEEDING -->
+<div id="bleeding" class="section-content bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">Severe Bleeding</h2>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Apply firm, direct pressure using cloth or bandage.</li>
+        <li>Maintain pressure continuously.</li>
+        <li>Elevate injured area if possible.</li>
+        <li>Do not remove large embedded objects.</li>
+    </ol>
+</div>
+
+<!-- BURNS -->
+<div id="burns" class="section-content bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">Burns</h2>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Cool burn under clean running water for 20 minutes.</li>
+        <li>Remove tight jewelry.</li>
+        <li>Cover loosely with sterile dressing.</li>
+        <li>Do NOT apply ice, oil, or toothpaste.</li>
+    </ol>
+</div>
+
+<!-- SEIZURE -->
+<div id="seizure" class="section-content bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">Seizures</h2>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Move harmful objects away.</li>
+        <li>Place something soft under head.</li>
+        <li>Do not restrain the person.</li>
+        <li>Do not put anything in the mouth.</li>
+        <li>Time the seizure.</li>
+    </ol>
+</div>
+
+<!-- FAINTING -->
+<div id="fainting" class="section-content bg-white rounded-3xl p-8 shadow-md border">
+    <h2 class="text-2xl font-bold mb-4">Fainting</h2>
+
+    <ol class="list-decimal ml-6 space-y-2">
+        <li>Lay the person flat on their back.</li>
+        <li>Elevate legs slightly.</li>
+        <li>Loosen tight clothing.</li>
+        <li>Ensure proper ventilation.</li>
+    </ol>
+</div>
+
+</section>
+</div>
+</main>
+
+<footer class="py-6 text-center text-xs text-slate-400">
+&copy; 2026 UniWell First Aid Manual
+</footer>
+
+<script>
+lucide.createIcons();
+
+function showSection(id) {
+    document.querySelectorAll('.section-content').forEach(sec => {
+        sec.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>
