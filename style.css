@@ -786,5 +786,5 @@
         table td:nth-child(6),
         table td:nth-child(8),
         table td:nth-child(9) {
-        text-transform: capitalize !important;
+        text-transform: uppercase !important;
         }
